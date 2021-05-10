@@ -29,8 +29,8 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'email' => 'required|email|max:64',
-            'password' => 'required|string|min:8',
+            'email' => 'required|email',
+            'password' => 'required|string',
         ]);
 
         if($validator->fails()){
@@ -42,7 +42,7 @@ class UserController extends Controller
 
         //Creating new user
         $user = User::create($input);
-   
+
 
      /**Take note of this: Your user authentication access token is generated here **/
         $data['token'] =  $user->createToken('LucidPostcard')->accessToken;
