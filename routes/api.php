@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostcardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,3 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/register', [UserController::class, 'create']);
 
 Route::get('/postcards/all', [PostcardController::class, 'index']);
+
+Route::get('/images/all', [ImageController::class, 'index']);
+
+Route::post('/postcards/create', [PostcardController::class, 'store']);
