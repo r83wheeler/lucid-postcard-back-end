@@ -17,13 +17,17 @@ class UserPostcards extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+
             $table->unsignedBigInteger('image_id');
             $table->foreign('image_id')->references('id')->on('images');
-            $table->unsignedBigInteger('postcard_id')->references('id')->on('postcards');
+
+            $table->unsignedBigInteger('postcard_id');
+            $table->foreign('postcard_id')->references('id')->on('postcards');
+
             $table->text('text');
             //$table->unsignedBigInteger('cart_item_id');
             $table->string('address1');
-            $table->string('address2');
+            $table->string('address2')->nullable;
             $table->string('city');
             $table->string('state');
             $table->string('zip');

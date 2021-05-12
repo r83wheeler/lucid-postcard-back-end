@@ -7,6 +7,7 @@ use App\Models\Image;
 use App\Models\UserPostcard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class PostcardController extends Controller
 {
@@ -38,20 +39,7 @@ class PostcardController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-              'postcardImage' => 'required|mimes:jpg,png|max:2048',
-        ]);
-
-        if($validator->fails()) {
-
-            return response()->json(['error'=>$validator->errors()], 401);
-         }
-
-
-        if ($file = $request->file('postcardImage')) {
-            $path = $file->store('public/files');
-            $filename = $file->getClientOriginalName();
-
+           // Log::debug($request["postcardImage"]);
             //store your file into directory and db
 
             // create the userpostcard
@@ -59,22 +47,24 @@ class PostcardController extends Controller
             // the request object contains, Text, Address, Image
             // 1.  Save the Image file and record in the database
 
-            $image = new Image();
-            $image->path = $filename;
-            $image->user_id = $request->user()->id;
-            $image->save();
+            // $image = new Image();
+            // $image->path = $filename;
+            // $image->user_id = $request->user()->id;
+            // $image->save();
 
             // 2.  Save the UserPostCard and reference the image id from the new image
-            $postcard = new UserPostcard();
-            $postcard->image_id = $image->id;
-            $postcard->user_id = $request->user()->id;
+            $postcard = new UserPostcard;
+            $user = $request->user();
+            //Log::debug(print_r($user, true));
+            $postcard->image_id = $request["postcardImage"];
+            $postcard->user_id = $user->id;
             $postcard->text = $request['message'];
             $postcard->address1 = $request['address1'];
-            $postcard->address2 = $request['address2'];
+            $postcard->address2 = "-";
             $postcard->city = $request['city'];
             $postcard->state = $request['state'];
             $postcard->zip = $request['zip'];
-            $postcard->postcard_id = 1;
+            $postcard->postcard_id = $request["postcardImage"];
             $postcard->save();
 
             return response()->json([
@@ -82,8 +72,6 @@ class PostcardController extends Controller
                 "message" => "File successfully uploaded",
                 "postcard" => $postcard
             ]);
-
-        }
     }
 
     /**

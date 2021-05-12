@@ -27,4 +27,6 @@ Route::get('/postcards/all', [PostcardController::class, 'index']);
 
 Route::get('/images/all', [ImageController::class, 'index']);
 
-Route::post('/postcards/create', [PostcardController::class, 'store']);
+Route::middleware('auth:api')->group(function (){
+    Route::post('/postcards/create', [PostcardController::class, 'store']);
+});
